@@ -1,0 +1,250 @@
+<%- include('../partials/navbar') %>
+
+<div class="max-w-5xl mx-auto pb-12">
+  <div class="mb-6 flex items-center justify-between">
+    <div class="flex items-center">
+      <a href="javascript:history.back()" class="text-green-600 hover:text-green-800 mr-4">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </a>
+      <h1 class="text-2xl font-bold text-gray-900">Report #<%= report.report_id %> Details</h1>
+    </div>
+    <div class="flex space-x-2">
+      <!-- Status Badge -->
+      <% if (report.status === 'Pending') { %>
+        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200">Pending</span>
+      <% } else if (report.status === 'In Progress') { %>
+        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 border border-blue-200">In Progress</span>
+      <% } else { %>
+        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 text-green-800 border border-green-200">Resolved</span>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Main Content: Report Details & Comments -->
+    <div class="lg:col-span-2 space-y-8">
+      
+      <!-- Report Info Card -->
+      <div class="bg-white shadow sm:rounded-lg border border-gray-100 overflow-hidden">
+        <% if (report.photo_path) { %>
+          <div class="w-full h-64 bg-gray-200">
+            <img src="<%= report.photo_path %>" alt="Waste report photo" class="w-full h-full object-cover">
+          </div>
+        <% } %>
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Waste Information</h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">Details of the submitted report.</p>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Reporter</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= report.reporter_name %></dd>
+            </div>
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Category & Location</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= report.category_name %> - <%= report.location_name %></dd>
+            </div>
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Priority</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <% if (report.priority === 'High') { %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">High</span>
+                <% } else if (report.priority === 'Medium') { %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">Medium</span>
+                <% } else { %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Low</span>
+                <% } %>
+              </dd>
+            </div>
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Assigned To</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= report.assigned_name || 'Unassigned' %></dd>
+            </div>
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Description</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 whitespace-pre-wrap"><%= report.description %></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="bg-white shadow sm:rounded-lg border border-gray-100">
+        <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Discussion</h3>
+        </div>
+        
+        <div class="p-6">
+          <div class="space-y-6 mb-6">
+            <% if (comments.length === 0) { %>
+              <p class="text-gray-500 text-sm text-center italic">No comments yet. Start the discussion below.</p>
+            <% } %>
+            
+            <% comments.forEach(comment => { %>
+              <div class="flex space-x-3">
+                <div class="flex-shrink-0">
+                  <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold border border-green-200">
+                    <%= comment.user_name.charAt(0).toUpperCase() %>
+                  </div>
+                </div>
+                <div>
+                  <div class="text-sm">
+                    <span class="font-medium text-gray-900"><%= comment.user_name %></span>
+                    <span class="text-gray-500 text-xs ml-2 border border-gray-200 px-1.5 rounded bg-gray-50"><%= comment.user_role %></span>
+                  </div>
+                  <div class="mt-1 text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-3 rounded-lg border border-gray-100 shadow-sm"><%= comment.comment_text %></div>
+                  <div class="mt-2 text-xs text-gray-400">
+                    <%= new Date(comment.created_at).toLocaleString() %>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+
+          <!-- Add Comment Form -->
+          <form action="/reports/<%= report.report_id %>/comment" method="POST" class="mt-6 flex gap-x-3">
+            <div class="flex-shrink-0">
+              <div class="h-10 w-10 rounded-full bg-green-600 flex items-center justify-center text-white font-bold shadow-sm">
+                <%= locals.user.name.charAt(0).toUpperCase() %>
+              </div>
+            </div>
+            <div class="min-w-0 flex-1 relative">
+              <label for="comment_text" class="sr-only">Add a comment</label>
+              <textarea id="comment_text" name="comment_text" rows="3" class="shadow-sm block w-full focus:ring-green-500 focus:border-green-500 sm:text-sm border border-gray-300 rounded-md p-3" placeholder="Add a comment..." required></textarea>
+              <div class="mt-3 flex justify-end">
+                <button type="submit" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150">
+                  Post Comment
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar: Status Update & Timeline -->
+    <div class="space-y-8">
+      
+      <!-- Update Status Form (Admin/Maintenance) -->
+      <% if (locals.user.role === 'admin' || locals.user.role === 'maintenance') { %>
+        <div class="bg-white shadow sm:rounded-lg border border-gray-100">
+          <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Update Report</h3>
+          </div>
+          <div class="px-4 py-5 sm:p-6">
+            <form action="/reports/<%= report.report_id %>/status" method="POST">
+              <div class="space-y-4">
+                <div>
+                  <label for="new_status" class="block text-sm font-medium text-gray-700">Status</label>
+                  <select id="new_status" name="new_status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md shadow-sm border bg-white">
+                    <option value="Pending" <%= report.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="In Progress" <%= report.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                    <option value="Resolved" <%= report.status === 'Resolved' ? 'selected' : '' %>>Resolved</option>
+                  </select>
+                </div>
+                
+                <% if (locals.user.role === 'admin') { %>
+                  <div>
+                    <label for="priority" class="block text-sm font-medium text-gray-700">Priority</label>
+                    <select id="priority" name="priority" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md shadow-sm border bg-white">
+                      <option value="Low" <%= report.priority === 'Low' ? 'selected' : '' %>>Low</option>
+                      <option value="Medium" <%= report.priority === 'Medium' ? 'selected' : '' %>>Medium</option>
+                      <option value="High" <%= report.priority === 'High' ? 'selected' : '' %>>High</option>
+                    </select>
+                  </div>
+                <% } %>
+                
+                <div>
+                  <label for="change_reason" class="block text-sm font-medium text-gray-700">Status Change Note (Optional)</label>
+                  <div class="mt-1">
+                    <textarea id="change_reason" name="change_reason" rows="2" class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"></textarea>
+                  </div>
+                </div>
+                
+                <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+                  Update Report
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      <% } %>
+
+      <!-- Status History Timeline -->
+      <div class="bg-white shadow sm:rounded-lg border border-gray-100">
+        <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">History</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <div class="flow-root">
+            <ul class="-mb-8">
+              <% history.forEach((item, index) => { %>
+                <li>
+                  <div class="relative pb-8">
+                    <% if (index !== history.length - 1) { %>
+                      <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+                    <% } %>
+                    <div class="relative flex space-x-3">
+                      <div>
+                        <span class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center ring-8 ring-white">
+                          <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </span>
+                      </div>
+                      <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                        <div>
+                          <p class="text-sm text-gray-500">
+                            Status changed from <span class="font-medium text-gray-900"><%= item.old_status %></span> to <span class="font-medium text-gray-900"><%= item.new_status %></span> by <span class="font-medium text-gray-900"><%= item.changed_by_name %></span>
+                          </p>
+                          <% if (item.change_reason) { %>
+                            <p class="mt-1 text-sm text-gray-600 bg-gray-50 p-2 rounded border border-gray-100"><%= item.change_reason %></p>
+                          <% } %>
+                        </div>
+                        <div class="text-right text-xs whitespace-nowrap text-gray-500">
+                          <time datetime="<%= item.changed_at %>"><%= new Date(item.changed_at).toLocaleString() %></time>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              <% }) %>
+              
+              <!-- Original Submission Node -->
+              <li>
+                <div class="relative pb-8">
+                  <div class="relative flex space-x-3">
+                    <div>
+                      <span class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center ring-8 ring-white">
+                        <svg class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                      </span>
+                    </div>
+                    <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                      <div>
+                        <p class="text-sm text-gray-500">
+                          Report created by <span class="font-medium text-gray-900"><%= report.reporter_name %></span>
+                        </p>
+                      </div>
+                      <div class="text-right text-xs whitespace-nowrap text-gray-500">
+                        <time datetime="<%= report.created_at %>"><%= new Date(report.created_at).toLocaleString() %></time>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

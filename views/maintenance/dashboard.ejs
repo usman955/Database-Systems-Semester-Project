@@ -1,0 +1,80 @@
+<%- include('../partials/navbar') %>
+
+<div class="mb-6 flex justify-between items-center">
+  <h1 class="text-2xl font-bold text-gray-900">Maintenance Dashboard</h1>
+</div>
+
+<div class="mb-8">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">Assigned Tasks</h2>
+  <div class="bg-white shadow overflow-hidden sm:rounded-md border border-gray-100">
+    <ul class="divide-y divide-gray-200">
+      <% reports.forEach(report => { %>
+        <li class="p-5 hover:bg-gray-50 transition duration-150 ease-in-out">
+          <a href="/reports/<%= report.report_id %>" class="block focus:outline-none">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center mb-1">
+                <p class="text-base font-medium text-green-700 truncate">
+                  #<%= report.report_id %> - <%= report.category_name %> at <%= report.location_name %>
+                </p>
+                <div class="ml-3 flex-shrink-0 flex items-center space-x-2">
+                  <% if (report.priority === 'High') { %>
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">High</span>
+                  <% } else if (report.priority === 'Medium') { %>
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">Medium</span>
+                  <% } else { %>
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Low</span>
+                  <% } %>
+                  
+                  <% if (report.status === 'Pending') { %>
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                  <% } else if (report.status === 'In Progress') { %>
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">In Progress</span>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            <div class="mt-2 text-sm text-gray-500">
+              <p class="truncate"><%= report.description %></p>
+              <p class="mt-1">Date Assigned: <%= new Date(report.updated_at).toLocaleDateString() %></p>
+            </div>
+          </a>
+        </li>
+      <% }) %>
+      <% if (reports.length === 0) { %>
+        <li class="p-8 text-center text-gray-500">
+          <p class="text-lg">No active assigned tasks.</p>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</div>
+
+<div class="mb-8">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">Recently Resolved</h2>
+  <div class="bg-white shadow overflow-hidden sm:rounded-md border border-gray-100">
+    <ul class="divide-y divide-gray-200">
+      <% resolvedReports.forEach(report => { %>
+        <li class="p-4 hover:bg-gray-50 transition duration-150 ease-in-out">
+          <a href="/reports/<%= report.report_id %>" class="block focus:outline-none">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-gray-600 truncate">
+                #<%= report.report_id %> - <%= report.category_name %> at <%= report.location_name %>
+              </p>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
+            </div>
+            <div class="mt-1 text-xs text-gray-500">
+              <p>Resolved on: <%= new Date(report.resolved_at).toLocaleDateString() %></p>
+            </div>
+          </a>
+        </li>
+      <% }) %>
+      <% if (resolvedReports.length === 0) { %>
+        <li class="p-4 text-center text-sm text-gray-500">
+          <p>No recently resolved tasks.</p>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

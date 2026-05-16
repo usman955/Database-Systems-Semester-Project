@@ -1,0 +1,55 @@
+<%- include('../partials/navbar') %>
+
+<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+    <div>
+      <h2 class="mt-2 text-center text-3xl font-extrabold text-gray-900">
+        Sign in to EcoTracker
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Or
+        <a href="/auth/register" class="font-medium text-green-600 hover:text-green-500 transition duration-150">
+          create a new account
+        </a>
+      </p>
+    </div>
+    <form class="mt-8 space-y-6" action="/auth/login" method="POST">
+      <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="email" class="sr-only">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition duration-150" placeholder="Email address">
+        </div>
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition duration-150" placeholder="Password">
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out shadow-md">
+          Sign in
+        </button>
+      </div>
+    </form>
+    
+    <div class="mt-6">
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-white text-gray-500 font-medium">
+            Demo Accounts
+          </span>
+        </div>
+      </div>
+      <div class="mt-4 text-sm text-gray-600 text-center space-y-2 bg-gray-50 p-4 rounded-md border border-gray-100">
+        <p><span class="font-semibold text-gray-800">Admin:</span> admin@campus.edu / admin123</p>
+        <p><span class="font-semibold text-gray-800">Student:</span> john@campus.edu / student123</p>
+        <p><span class="font-semibold text-gray-800">Maintenance:</span> mike@campus.edu / maint123</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

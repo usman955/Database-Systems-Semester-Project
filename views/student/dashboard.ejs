@@ -1,0 +1,65 @@
+<%- include('../partials/navbar') %>
+
+<div class="mb-6 flex justify-between items-center">
+  <h1 class="text-2xl font-bold text-gray-900">My Reports</h1>
+  <a href="/student/submit-report" class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition duration-200 inline-flex items-center">
+    <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    </svg>
+    Submit New Report
+  </a>
+</div>
+
+<div class="bg-white shadow overflow-hidden sm:rounded-md">
+  <% if (reports.length === 0) { %>
+    <div class="px-4 py-12 text-center text-gray-500">
+      <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <p class="text-lg font-medium">No reports submitted yet.</p>
+      <p class="mt-2">When you submit a waste report, it will appear here.</p>
+    </div>
+  <% } else { %>
+    <ul class="divide-y divide-gray-200">
+      <% reports.forEach(report => { %>
+        <li>
+          <a href="/reports/<%= report.report_id %>" class="block hover:bg-gray-50 transition duration-150 ease-in-out">
+            <div class="px-4 py-4 sm:px-6">
+              <div class="flex items-center justify-between">
+                <p class="text-sm font-medium text-green-600 truncate">
+                  <%= report.category_name %> at <%= report.location_name %>
+                </p>
+                <div class="ml-2 flex-shrink-0 flex">
+                  <% if (report.status === 'Pending') { %>
+                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</p>
+                  <% } else if (report.status === 'In Progress') { %>
+                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">In Progress</p>
+                  <% } else { %>
+                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Resolved</p>
+                  <% } %>
+                </div>
+              </div>
+              <div class="mt-2 sm:flex sm:justify-between">
+                <div class="sm:flex">
+                  <p class="flex items-center text-sm text-gray-500">
+                    <span class="truncate"><%= report.description.substring(0, 80) %><%= report.description.length > 80 ? '...' : '' %></span>
+                  </p>
+                </div>
+                <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                  <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p>
+                    Submitted on <time datetime="<%= report.created_at %>"><%= new Date(report.created_at).toLocaleDateString() %></time>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </a>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>
